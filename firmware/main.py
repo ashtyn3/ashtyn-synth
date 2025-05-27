@@ -1,5 +1,6 @@
 import usb.device
 from usb.device.midi import MIDIInterface
+
 from usb.device.hid import HIDInterface  # Hypothetical import
 import time
 import keeb
@@ -111,21 +112,22 @@ while m.is_open():
             key_id = calc_key_id(r, c)
             if current_state[r][c] and not keeb.last_state[r][c]:
                 pressed.add(key_id)
-                if r == 0 or r == 1:
-                    if r == 0 and c in SHARP_COLS:
-                        # Row 0: double key (sharp)
-                        pitch_add = DOUBLE_ADDS[col_idx]
-                        if pitch_add is not None:
-                            pitch = BASE_PITCH + pitch_add
-                            key_pitches[key_id] = pitch
-                            m.note_on(CHANNEL, pitch)
-                    elif r == 1 or DOUBLE_ADDS[col_idx] is None:
-                        # Row 1: single key (normal)
-                        pitch_add = SINGLE_ADDS[col_idx]
-                        if pitch_add is not None:
-                            pitch = BASE_PITCH + pitch_add
-                            key_pitches[key_id] = pitch
-                            m.note_on(CHANNEL, pitch)
+                if c > 2:
+                    if r == 0 or r == 1:
+                        if r == 0 and c in SHARP_COLS:
+                            # Row 0: double key (sharp)
+                            pitch_add = DOUBLE_ADDS[col_idx]
+                            if pitch_add is not None:
+                                pitch = BASE_PITCH + pitch_add
+                                key_pitches[key_id] = pitch
+                                m.note_on(CHANNEL, pitch)
+                        elif r == 1 or DOUBLE_ADDS[col_idx] is None:
+                            # Row 1: single key (normal)
+                            pitch_add = SINGLE_ADDS[col_idx]
+                            if pitch_add is not None:
+                                pitch = BASE_PITCH + pitch_add
+                                key_pitches[key_id] = pitch
+                                m.note_on(CHANNEL, pitch)
 
                 if key_id == 26:
                     if PITCH_MOD != -4:
@@ -137,7 +139,7 @@ while m.is_open():
 
             if not current_state[r][c] and keeb.last_state[r][c]:
                 pressed.discard(key_id)
-                if r == 1:
+                if (r == 1 or r == 0) and c > 2:
                     m.note_off(CHANNEL, key_pitches[key_id])
                 print("release:", key_id)
 
