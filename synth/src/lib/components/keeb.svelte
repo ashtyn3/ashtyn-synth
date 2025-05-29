@@ -1,29 +1,14 @@
 <script lang="ts">
-	import { layout } from '$lib/layouts.svelte';
-	import { addGain, loseGain, gain } from '$lib/synth.svelte';
-	import { setText } from './buzzer.svelte';
-	let { states = $bindable(), mode } = $props();
+import { layout, logic } from "$lib/layouts.svelte";
+let { states = $bindable(), mode } = $props();
 
-	$effect(() => {
-		console.log(states);
-		if (states[23] === 1) {
-			if (states[0] === 1) {
-				addGain();
-				setText(`Gain ${(gain() * 100).toFixed(0)}`);
-			}
-			if (states[11] === 1) {
-				loseGain();
-				setText(`Gain ${(gain() * 100).toFixed(0)}`);
-			}
-		}
-	});
-	const keyPositions = $derived(layout(mode).flat().filter(Boolean));
+const keyPositions = $derived(layout(mode).flat().filter(Boolean));
 
-	let keys = $state(new Array(keyPositions.length));
+let keys = $state(new Array(keyPositions.length));
 
-	const keyWidth = 17.5794;
-	const keyHeight = 17.5794;
-	const rx = 2.5;
+const keyWidth = 17.5794;
+const keyHeight = 17.5794;
+const rx = 2.5;
 </script>
 
 <svg viewBox="0 0 290 84" fill="none" xmlns="http://www.w3.org/2000/svg">

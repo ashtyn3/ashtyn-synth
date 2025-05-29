@@ -31,7 +31,9 @@
 		"@elemaudio/core": "^4.0.1",
 		"@elemaudio/plugin-renderer": "^1.0.18",
 		"@elemaudio/web-renderer": "^4.0.3",
+		"@types/d3": "^7.4.3",
 		"@types/w3c-web-hid": "^1.0.6",
+		"d3": "^7.9.0",
 		"lucide-svelte": "^0.511.0",
 		"webmidi": "^3.1.12"
 	}
